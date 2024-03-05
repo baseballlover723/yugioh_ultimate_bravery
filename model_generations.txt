@@ -1,0 +1,8 @@
+rails g model Card name:text card_type:text:index frame_type:text:index race:text archetype:text:index card_attribute:text:index level:integer:index atk:integer:index def:integer:index scale:integer:index extra_deck:boolean:index link_markers:text desc:text --primary-key-type=integer
+not_null: name, type, frame_type, race, extra_deck, desc
+nullable: archetype, card_attribute, level, atk, def, scale
+link_markers, null: false, array: true, default: []
+index :type, :frame_type, :archetype, :card_attribute, :level, :atk, :def, :scale, :extra_deck
+
+rails g model CardArt card_id:belongs_to small_path:text full_path:text
+t.references :card

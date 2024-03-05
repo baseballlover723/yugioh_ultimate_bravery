@@ -1,0 +1,30 @@
+# TODO convert to website
+# DONE convert to own project (use rails and react)
+# TODO do some system design to make look ups easier and faster (archatypes)
+# Support number of cards in deck (default to 40)
+#   have a min number of cards needed to be an archetype (5?), and if less then that, then go through previous archetypes and add 1 more card
+# TODO have support for archetypes
+#   Idea, get some number of archetypes (1-5 or configerable?), and then do random amounts from 1-3 of cards
+#   Doesn't have to have the same amount of cards per archetype
+# TODO configure monsters / spell / trap numbers
+# TODO be able to select which archetypes to select from
+# TODO be able to export decklist (do reasearch on if there's a common format, or what that looks like)
+# TODO support OCG
+# TODO respect ban list
+# TODO support extra deck
+# TODO get an extra deck monsters from archetype (proportionally)
+# TODO actually get an extra deck monster that is possible to summon from archetype?
+# TODO configure extra deck by type? (filter archetypes based on?, maybe select extra deck cards first)
+# TODO be able to limit based on master duel rarity? Probs not
+
+# TODO convert to use https://ygoprodeck.com/api-guide/
+
+
+DB stuff
+# TODO add archetype table
+# TODO add banlist table
+# TODO add banlist format table?
+# TODO add images table? need to figure out that part
+# TODO add enums for type, frame_type, race, attribute
+# DONE put skill cards into their own table
+# DONE remove token cards

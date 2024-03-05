@@ -47,9 +47,19 @@ gem "bootsnap", require: false
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
 
+# Http library
+gem 'httparty', '~> 0.21'
+# Parallel processing library
+gem 'parallel', '~> 1.23'
+# Rate limiting library
+gem 'ruby-limiter', '~> 2.3'
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ]
+
+  # cli-progress-bar
+  gem 'ruby-progressbar', '~> 1.13'
 end
 
 group :development do
@@ -61,6 +71,9 @@ group :development do
 
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
+
+  # adds db info to the top of models in a comment
+  gem 'annotate', '~> 3.2'
 end
 
 group :test do
