@@ -41,5 +41,13 @@
 
 /.idea
 
+# large image files
+public/images/cards/full/*
+public/images/cards/small/*
+!public/images/cards/full/.keep
+!public/images/cards/small/.keep
+
+# old files
 download.rb
+# local files
 *.local*

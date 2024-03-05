@@ -27,5 +27,8 @@ module YugiohUltimateBravery
     config.generators do |g|
       g.orm :active_record, primary_key_type: :uuid
     end
+
+    # hit local web server for card art images
+    config.use_local = true
   end
 end

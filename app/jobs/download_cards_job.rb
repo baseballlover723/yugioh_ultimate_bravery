@@ -24,6 +24,8 @@ class DownloadCardsJob < ApplicationJob
     card_upsert_start = Time.now
     puts "Took #{card_upsert_start - parse_start} seconds"
 
+    old_logger_level = ActiveRecord::Base.logger.level
+    ActiveRecord::Base.logger.level = 1
     print "Upserting card data: "
     ids = Card.upsert_all(card_params, record_timestamps: true)
     skill_card_upsert_start = Time.now
