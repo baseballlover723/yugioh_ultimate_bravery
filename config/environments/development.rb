@@ -74,4 +74,9 @@ Rails.application.configure do
 
   # Raise error when a before_action's only/except options reference missing actions
   config.action_controller.raise_on_missing_callback_actions = true
+
+  config.logger = ActiveSupport::BroadcastLogger.new(
+    ActiveSupport::Logger.new($stdout,              formatter: Logger::Formatter.new),
+    ActiveSupport::Logger.new("log/development.log", formatter: Logger::Formatter.new)
+  )
 end

@@ -14,7 +14,7 @@ class DownloadCardsJob < ApplicationJob
     # generate_all_keys_file(cards_json["data"])
     # list_frame_types(cards_json["data"])
 
-    print "parsing data: "
+    logger.debug "Parsing data"
     parse_start = Time.now
     card_params = cards_json["data"].reject do |card|
       card["frameType"] == "token"
@@ -22,23 +22,25 @@ class DownloadCardsJob < ApplicationJob
       Card.translate_ygo_pro_deck_params(card)
     end
     card_upsert_start = Time.now
-    puts "Took #{card_upsert_start - parse_start} seconds"
+    logger.info "Parsing data took #{(card_upsert_start - parse_start).to_human_duration} seconds"
 
     old_logger_level = ActiveRecord::Base.logger.level
     ActiveRecord::Base.logger.level = 1
-    print "Upserting card data: "
+    logger.debug "Upserting card data"
     ids = Card.upsert_all(card_params, record_timestamps: true)
     skill_card_upsert_start = Time.now
-    puts "#{ids.rows.size.to_fs(:delimited)} rows inserted. Took #{skill_card_upsert_start - card_upsert_start} seconds"
+    logger.info "Upserting card data #{ids.rows.size.to_fs(:delimited)} rows inserted. Took #{(skill_card_upsert_start - card_upsert_start).to_human_duration} seconds"
+
+    ActiveRecord::Base.logger.level = old_logger_level
   end
 
   def self.fetch_cards_info
     if Rails.env.local? && File.exist?(LOCAL_CACHE_FILE) && Time.now - File.mtime(LOCAL_CACHE_FILE) < CACHE_FILE_LIFETIME
-      puts "using locally cached file"
+      logger.info "Using locally cached file"
       return JSON.parse(File.read(LOCAL_CACHE_FILE))
     end
 
-    puts "updating card data"
+    logger.info "Updating card data"
     resp = HTTParty.get(CARD_DATA_URL)
     json = resp.parsed_response
 

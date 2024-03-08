@@ -25,7 +25,7 @@ class DownloadCardImagesJob < ApplicationJob
 
     existing_card_arts = CardArt.all.index_by(&:id)
 
-    print "creating image download jobs "
+    logger.debug "Creating image download jobs"
     jobs_start = Time.now
     jobs = cards.flat_map do |card|
       name = card["name"]
@@ -51,10 +51,10 @@ class DownloadCardImagesJob < ApplicationJob
       end
     end
     download_start = Time.now
-    puts "Took #{download_start - jobs_start} seconds"
+    logger.info "Creating image download jobs took #{(download_start - jobs_start).to_human_duration}"
     numb_arts = jobs.size
 
-    puts "Downloading Card arts (#{jobs.size.to_fs(:delimited)})"
+    logger.debug "Downloading Card arts (#{jobs.size.to_fs(:delimited)})"
     old_logger_level = ActiveRecord::Base.logger.level
     ActiveRecord::Base.logger.level = 1
 
@@ -116,6 +116,7 @@ class DownloadCardImagesJob < ApplicationJob
     accumulator.send([:stop].freeze)
     save_thread.join
     ActiveRecord::Base.logger.level = old_logger_level
+    logger.info "Downloading Card arts (#{jobs.size.to_fs(:delimited)}) took #{(Time.now - download_start).to_human_duration}"
   end
 
   def download_image(queue, url, attempt = 1, &block)
