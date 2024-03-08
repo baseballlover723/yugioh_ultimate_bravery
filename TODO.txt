@@ -28,3 +28,11 @@ DB stuff
 # TODO add enums for type, frame_type, race, attribute
 # DONE put skill cards into their own table
 # DONE remove token cards
+
+
+# EXTRA
+# TODO have an admin page to kick up job updates
+# TODO have a progress page to view current status of new cards (channel + websocket?)
+# TODO have a cancel button for canceling job
+# TODO graceful cancel by using a channel or something
+# DONE convert puts to logs
