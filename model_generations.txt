@@ -6,3 +6,8 @@ index :type, :frame_type, :archetype, :card_attribute, :level, :atk, :def, :scal
 
 rails g model CardArt card_id:belongs_to small_path:text full_path:text
 t.references :card
+
+rails g model Deck name:text format:text skill_card:references generate_options:jsonb
+
+rails g model DeckCardArt deck:belongs_to card_art:belongs_to
+
