@@ -16,9 +16,11 @@
 # TODO actually get an extra deck monster that is possible to summon from archetype?
 # TODO configure extra deck by type? (filter archetypes based on?, maybe select extra deck cards first)
 # TODO be able to limit based on master duel rarity? Probs not
+# TODO favor either 40 or 60 cards (lets say 50% 40, 33.3% 60, 16.6% between).
 
-# TODO convert to use https://ygoprodeck.com/api-guide/
+# DONE convert to use https://ygoprodeck.com/api-guide/
 
+# DONE convert basic deck generation to use cart arts instead of cards
 
 DB stuff
 # TODO add archetype table
@@ -26,9 +28,18 @@ DB stuff
 # TODO add banlist format table?
 # TODO add images table? need to figure out that part
 # TODO add enums for type, frame_type, race, attribute
-# DONE put skill cards into their own table
+# DONE put skill cards into their own table (reverted)
 # DONE remove token cards
+# DONE handle different art works (store in join table?) (store in array?) (move cards into by art work (multiple arts == multiple cards))
+# DONE move cart art into own join table, specific with card. so that deck can link to card art. Card art should only have small_url, full_url, and card_id ref
+# TODO ideally I can inline the card data in the json
 
+Front End
+# TODO have a page for viewing a generated deck
+# TODO have a page for generating a deck
+#   TODO all the filters and such
+# TODO have an easy way to share decks (as images)
+# TODO link to wiki or something for more card details?
 
 # EXTRA
 # TODO have an admin page to kick up job updates
@@ -36,3 +47,4 @@ DB stuff
 # TODO have a cancel button for canceling job
 # TODO graceful cancel by using a channel or something
 # DONE convert puts to logs
+# DONE make a local server to "download" images from

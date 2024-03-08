@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_05_101115) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_08_011546) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -52,4 +52,28 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_05_101115) do
     t.index ["scale"], name: "index_cards_on_scale"
   end
 
+  create_table "deck_card_arts", id: false, force: :cascade do |t|
+    t.uuid "deck_id", null: false
+    t.integer "card_art_id", null: false
+    t.integer "copies", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["card_art_id"], name: "index_deck_card_arts_on_card_art_id"
+    t.index ["deck_id", "card_art_id"], name: "index_deck_card_arts_on_deck_id_and_card_art_id", unique: true
+    t.index ["deck_id"], name: "index_deck_card_arts_on_deck_id"
+  end
+
+  create_table "decks", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.text "name"
+    t.text "format"
+    t.integer "skill_card_art_id"
+    t.jsonb "generate_options"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["skill_card_art_id"], name: "index_decks_on_skill_card_art_id"
+  end
+
+  add_foreign_key "deck_card_arts", "card_arts"
+  add_foreign_key "deck_card_arts", "decks"
+  add_foreign_key "decks", "card_arts", column: "skill_card_art_id"
 end

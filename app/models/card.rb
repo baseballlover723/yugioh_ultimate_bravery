@@ -39,6 +39,8 @@ class Card < ApplicationRecord
   ARRAY_ATTRIBUTE_NAMES = Set["link_markers"]
 
   has_many :card_arts
+  has_many :cards_deck
+  has_many :decks, through: :cards_deck
 
   scope :main_deck, -> {where(extra_deck: false).where.not(frame_type: "skill")}
   scope :extra_deck, -> {where(extra_deck: true).where.not(frame_type: "skill")}
