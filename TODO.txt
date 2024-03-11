@@ -21,6 +21,7 @@
 # DONE convert to use https://ygoprodeck.com/api-guide/
 
 # DONE convert basic deck generation to use cart arts instead of cards
+# TODO add side decks (need to ensure that you don't go over per card limit)
 
 DB stuff
 # TODO add archetype table
@@ -31,11 +32,12 @@ DB stuff
 # DONE put skill cards into their own table (reverted)
 # DONE remove token cards
 # DONE handle different art works (store in join table?) (store in array?) (move cards into by art work (multiple arts == multiple cards))
-# DONE move cart art into own join table, specific with card. so that deck can link to card art. Card art should only have small_url, full_url, and card_id ref
+# DONE move cart art into own join table, specific with card. so that deck can link to card art. CardArt art should only have small_url, full_url, and card_id ref
 # TODO ideally I can inline the card data in the json
 
 Front End
-# TODO have a page for viewing a generated deck
+# DONE (Basic) have a page for viewing a generated deck
+#   TODO improve UI
 # TODO have a page for generating a deck
 #   TODO all the filters and such
 # TODO have an easy way to share decks (as images)
@@ -48,3 +50,4 @@ Front End
 # TODO graceful cancel by using a channel or something
 # DONE convert puts to logs
 # DONE make a local server to "download" images from
+# TODO add a generate again button

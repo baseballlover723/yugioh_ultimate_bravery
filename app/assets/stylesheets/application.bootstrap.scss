@@ -1,6 +1,35 @@
 @import 'bootstrap/scss/bootstrap';
 @import 'bootstrap-icons/font/bootstrap-icons';
 
+.deck {
+  .card-art-row {
+    display: grid;
+    grid-gap: 4px;
+    padding: 2px 0;
+    justify-content: space-between;
+    grid-template-columns: repeat(max(9, calc(var(--num-cards) / var(--target-rows) - 0.51)), 1fr) 100px;
+
+    .card-art {
+      position: relative;
+      min-width: 0;
+
+      img {
+        max-width: 100px;
+        overflow-clip-margin: content-box;
+        overflow: clip;
+      }
+    }
+  }
+
+  .extra-deck > .card-art-row {
+    --target-rows: 1;
+  }
+
+  .main-deck > .card-art-row {
+    --target-rows: 4;
+  }
+}
+
 .footer {
   margin-top: auto;
 }
