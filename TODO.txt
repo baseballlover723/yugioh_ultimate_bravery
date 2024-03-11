@@ -16,7 +16,7 @@
 # TODO actually get an extra deck monster that is possible to summon from archetype?
 # TODO configure extra deck by type? (filter archetypes based on?, maybe select extra deck cards first)
 # TODO be able to limit based on master duel rarity? Probs not
-# TODO favor either 40 or 60 cards (lets say 50% 40, 33.3% 60, 16.6% between).
+# DONE favor either 40 or 60 cards (lets say 50% 40, 33.3% 60, 16.6% between).
 
 # DONE convert to use https://ygoprodeck.com/api-guide/
 

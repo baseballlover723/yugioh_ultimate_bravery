@@ -5,8 +5,10 @@ class DeckService
 
   def self.generate(options)
     deck = Deck.new(generate_options: options)
-    numb_main_deck_cards = rand(options[:main_deck])
-    numb_extra_deck_cards = rand(options[:extra_deck])
+    numb_main_deck_cards = generate_numb_main_deck
+    numb_extra_deck_cards = generate_numb_extra_deck
+    # numb_main_deck_cards = rand(options[:main_deck])
+    # numb_extra_deck_cards = rand(options[:extra_deck])
 
     # puts "main_deck_cards: #{@@main_deck_cards.inspect}"
     # puts "card_arts: #{@@main_deck_cards[0].card_arts.inspect}"
@@ -33,5 +35,31 @@ class DeckService
     end
 
     deck
+  end
+
+  private
+
+  def self.generate_numb_main_deck
+    numb = rand(6)
+    case numb
+    when 0..2
+      40
+    when 3..4
+      60
+    when 5
+      rand(41..59)
+    end
+  end
+
+  def self.generate_numb_extra_deck
+    numb = rand(10)
+    case numb
+    when 0..5
+      15
+    when 6..8
+      rand(1..14)
+    when 9
+      0
+    end
   end
 end
