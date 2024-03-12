@@ -35,6 +35,7 @@ const DeckShow = () => {
 
       sortMainDeck(deck.mainDeckCardArts);
       sortExtraDeck(deck.extraDeckCardArts);
+      delete deck.cardArts;
 
       setDeck(deck);
     }).catch((e) => {

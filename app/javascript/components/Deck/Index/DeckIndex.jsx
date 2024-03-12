@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import DeckList from "./DeckList";
+import {camelizeKeys, partition, sortExtraDeck, sortMainDeck} from "../../../Utils";
 
 const DeckIndex = () => {
   const navigate = useNavigate();
@@ -14,7 +15,18 @@ const DeckIndex = () => {
       }
       throw new Error(`Error fetching decks from api (${path} => ${res.status} ${res.statusText})`);
     }).then((data) => {
-      setDecks(data);
+      const decks = camelizeKeys(data);
+      decks.forEach((deck) => {
+        const [extraDeckCardArts, mainDeckCardArts] = partition(deck.cardArts, cardArt => cardArt.card.extraDeck);
+        deck.mainDeckCardArts = mainDeckCardArts;
+        deck.extraDeckCardArts = extraDeckCardArts;
+        delete deck.cardArts;
+
+        sortMainDeck(deck.mainDeckCardArts);
+        sortExtraDeck(deck.extraDeckCardArts);
+      });
+
+      setDecks(decks);
     }).catch((e) => {
       console.error(e);
       return navigate("/");
