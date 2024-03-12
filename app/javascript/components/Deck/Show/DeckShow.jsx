@@ -3,7 +3,7 @@ import {useNavigate, useParams} from "react-router-dom";
 import SkillCardArt from "../SkillCardArt";
 import MainDeck from "./MainDeck";
 import ExtraDeck from "./ExtraDeck";
-import {camelizeKeys, partition} from "../../../Utils";
+import {camelizeKeys, partition, sortMainDeck, sortExtraDeck} from "../../../Utils";
 
 const DeckShow = () => {
   const params = useParams();
@@ -16,7 +16,8 @@ const DeckShow = () => {
     generateOptions: {},
     createdAt: null,
     updatedAt: null,
-    cardArts: []
+    mainDeckCardArts: [],
+    extraDeckCardArts: []
   });
 
   useEffect(() => {
@@ -27,14 +28,20 @@ const DeckShow = () => {
       }
       throw new Error(`Error fetching decks from api (${path} => ${res.status} ${res.statusText})`);
     }).then((data) => {
-      setDeck(camelizeKeys(data));
+      const deck = camelizeKeys(data);
+      const [extraDeckCardArts, mainDeckCardArts] = partition(deck.cardArts, cardArt => cardArt.card.extraDeck);
+      deck.mainDeckCardArts = mainDeckCardArts;
+      deck.extraDeckCardArts = extraDeckCardArts;
+
+      sortMainDeck(deck.mainDeckCardArts);
+      sortExtraDeck(deck.extraDeckCardArts);
+
+      setDeck(deck);
     }).catch((e) => {
       console.error(e);
       return navigate("/");
     });
   }, []);
-
-  const [extraDeckCards, mainDeckCards] = partition(deck.cardArts, cardArt => cardArt.card.extraDeck);
 
   return (
       <>
@@ -43,8 +50,8 @@ const DeckShow = () => {
           <div>format: {deck.format}</div>
           <div>generateOptions: {JSON.stringify(deck.generateOptions)}</div>
           {deck.skillCardArt && <SkillCardArt cardArt={deck.skillCardArt}/>}
-          <MainDeck cardArts={mainDeckCards}/>
-          <ExtraDeck cardArts={extraDeckCards}/>
+          <MainDeck cardArts={deck.mainDeckCardArts}/>
+          <ExtraDeck cardArts={deck.extraDeckCardArts}/>
         </div>
         Deck: {JSON.stringify(deck)}
       </>
