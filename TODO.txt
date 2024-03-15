@@ -17,11 +17,24 @@
 # TODO configure extra deck by type? (filter archetypes based on?, maybe select extra deck cards first)
 # TODO be able to limit based on master duel rarity? Probs not
 # DONE favor either 40 or 60 cards (lets say 50% 40, 33.3% 60, 16.6% between).
+# TODO support generating multiple copies of a card (think about percentages).
 
 # DONE convert to use https://ygoprodeck.com/api-guide/
 
 # DONE convert basic deck generation to use cart arts instead of cards
 # TODO add side decks (need to ensure that you don't go over per card limit)
+
+Generate options
+# TODO basic generate options using yes no for different card types
+# TODO support specifying specific numbers of different card types
+# TODO support specifying ranges of numbers of different card types
+    # make omega query, get just ids, frame_type, and card_art_ids,
+    # select and remove mins from list
+    # randomly select from already selected - total max
+    # take that amount from list??
+
+# TODO support specifying certain attributes and stuff (atk, etc) on cards
+
 
 DB stuff
 # TODO add archetype table
