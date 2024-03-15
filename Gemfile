@@ -62,6 +62,9 @@ group :development, :test do
 
   # cli-progress-bar
   gem 'ruby-progressbar', '~> 1.13'
+
+  # Prefer Rspec over Minitest
+  gem 'rspec-rails', '~> 6.1'
 end
 
 group :development do
