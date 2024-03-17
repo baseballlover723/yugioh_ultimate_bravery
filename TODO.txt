@@ -32,9 +32,19 @@ Generate options
     # select and remove mins from list
     # randomly select from already selected - total max
     # take that amount from list??
-
+# TODO handle :default as option instead of nil
 # TODO support specifying certain attributes and stuff (atk, etc) on cards
+# TODO actually use values other then count
 
+Validation
+# DONE pick library (dry-validation)
+# TODO settle on what the front end will send
+#   TODO figure out how to send special weighted values (just a toggle?, maybe just default when full range)
+# TODO add array enum form to range vals
+# TODO add main deck stuff
+# DONE add basic extra deck validation
+# TODO figure out how to handle default values when not specified
+#   (easy way is to reverse merge afterwards, but then have to modify tests and validator to no do anything with :default)
 
 DB stuff
 # TODO add archetype table

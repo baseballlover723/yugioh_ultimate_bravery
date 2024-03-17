@@ -37,6 +37,7 @@ class Card < ApplicationRecord
   EXTRA_DECK_FRAME_TYPES = Set["fusion", "link", "xyz", "synchro", "fusion_pendulum", "synchro_pendulum", "xyz_pendulum"].freeze
   ATTRIBUTE_NAMES = self.attribute_names - ["created_at", "updated_at"]
   ARRAY_ATTRIBUTE_NAMES = Set["link_markers"]
+  EXTRA_DECK_MACRO_FRAME_TYPES = [:fusion, :synchro, :xyz, :link]
 
   has_many :card_arts
   has_many :cards_deck

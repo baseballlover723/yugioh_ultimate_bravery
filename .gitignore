@@ -51,3 +51,4 @@ public/images/cards/small/*
 download.rb
 # local files
 *.local*
+test_json/

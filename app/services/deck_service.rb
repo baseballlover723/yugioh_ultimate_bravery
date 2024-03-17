@@ -5,55 +5,55 @@ class DeckService
 
   OPTIONS = {
     main_deck: {
-      count: nil,
+      count: :default,
       monster: {
-        count: nil,
+        count: :default,
       },
       spell: {
-        count: nil
+        count: :default
       },
       trap: {
-        count: nil
+        count: :default
       }
     },
     extra_deck: {
-      count: nil,
+      count: :default,
       fusion: {
-        count: nil,
-        level: nil,
-        atk: nil,
-        def: nil,
-        card_attribute: nil,
-        card_type: nil
+        count: :default,
+        level: :default,
+        atk: :default,
+        def: :default,
+        card_attributes: :default,
+        races: :default
       },
       synchro: {
-        count: nil,
-        level: nil,
-        atk: nil,
-        def: nil,
-        card_attribute: nil,
-        card_type: nil
+        count: :default,
+        level: :default,
+        atk: :default,
+        def: :default,
+        card_attributes: :default,
+        races: :default
       },
       xyz: {
-        count: nil,
-        level: nil,
-        atk: nil,
-        def: nil,
-        card_attribute: nil,
-        card_type: nil
+        count: :default,
+        level: :default,
+        atk: :default,
+        def: :default,
+        card_attributes: :default,
+        races: :default
       },
       link: {
-        count: nil,
-        level: nil,
-        atk: nil,
-        def: nil,
-        card_attribute: nil,
-        card_type: nil
+        count: :default,
+        level: :default,
+        atk: :default,
+        def: :default,
+        card_attributes: :default,
+        races: :default
       }
     }
   }
 
-  def self.generate(**options)
+  def self.generate(options)
     options.with_defaults!(OPTIONS)
     puts "options: #{options}"
     deck = Deck.new(generate_options: options)
@@ -88,7 +88,7 @@ class DeckService
 
   def self.generate_numb_main_deck(option)
     case option
-    when nil
+    when :default
       numb = rand(6)
       case numb
       when 0..2
@@ -109,7 +109,7 @@ class DeckService
 
   def self.generate_numb_extra_deck(option)
     case option
-    when nil
+    when :default
       numb = rand(10)
       case numb
       when 0..5
@@ -136,14 +136,14 @@ class DeckService
                                .with(randomized_partition: Card.select(Arel.star, "row_number() over (partition by macro_frame_type) as r").from("randomized"))
 
     total_required = options.filter do |key, hash|
-      hash.is_a?(Hash)
+      hash.is_a?(Hash) && hash[key].is_a?(Range)
     end.sum do |key, hash|
       hash[:count].begin
     end
 
     required_query = randomized_partition.from("randomized_partition AS cards")
     required_query = options.filter do |key, hash|
-      hash.is_a?(Hash) && hash[:count]
+      hash.is_a?(Hash) && hash[:count].is_a?(Range)
     end.map do |option, hash|
       required_amount = hash[:count].begin
       required_query.where(macro_frame_type: option).where("r <= ?", required_amount)
@@ -153,10 +153,11 @@ class DeckService
 
     rest_query = randomized_partition.from("randomized_partition AS cards").order("random()")
     rest_query = options.filter do |key, hash|
-      hash.is_a?(Hash) && hash[:count].size > 1
+      hash.is_a?(Hash) && (hash[:count] == :default || hash[:count].size > 1)
     end.map do |option, hash|
-      min = hash[:count].begin
-      max = [total - total_required + hash[:count].begin, hash[:count].end].min
+      range = hash[:count] != :default ? hash[:count] : Api::V1::DeckContract::CONSTRAINTS[:extra_deck][:count][:min]..Api::V1::DeckContract::CONSTRAINTS[:extra_deck][:count][:max]
+      min = range.begin
+      max = [total - total_required + range.begin, range.end].min
       query = rest_query.where(macro_frame_type: option)
       query = query.where("r > ?", min) if min > 0
       query.where("r <= ?", max)
