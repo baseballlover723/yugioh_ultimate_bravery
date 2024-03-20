@@ -1,5 +1,30 @@
-import {camelCase} from 'lodash';
-import cardArt from "./components/Deck/CardArt";
+import {camelCase, isPlainObject, snakeCase} from 'lodash';
+
+export const bury = (obj, keys, value) => {
+  let nestedObj = obj;
+  const lastKey = keys[keys.length - 1];
+  for (let i = 0; i < keys.length - 1; i++) {
+    const key = keys[i];
+    if (!nestedObj.hasOwnProperty(key)) {
+      nestedObj[key] = {};
+    }
+    nestedObj = nestedObj[key];
+  }
+
+  nestedObj[lastKey] = {...nestedObj[lastKey], ...value};
+};
+
+export const dig = (obj, keys) => {
+  let nestedObj = obj;
+  for (let i = 0; i < keys.length; i++) {
+    const key = keys[i];
+    if (!nestedObj.hasOwnProperty(key)) {
+      return null;
+    }
+    nestedObj = nestedObj[key];
+  }
+  return nestedObj;
+};
 
 export const camelizeKeys = (obj) => {
   if (Array.isArray(obj)) {
@@ -16,6 +41,17 @@ export const camelizeKeys = (obj) => {
   return obj;
 };
 
+export const createRange = (min, max) => {
+  return Array.from({length: max - min + 1}, (_, i) => min + i);
+}
+
+export const jsonSetReplacer = (key, value) => {
+  if (value instanceof Set) {
+    return Array.from(value);
+  }
+  return value;
+};
+
 export const partition = (arr, fn) =>
     arr.reduce(
         (acc, val, i, arr) => {
@@ -24,6 +60,53 @@ export const partition = (arr, fn) =>
         },
         [[], []]
     );
+
+export const resolveActive = (obj) => {
+  Object.keys(obj).forEach((key) => {
+    if (obj[key].hasOwnProperty("active")) {
+      switch (obj[key].active) {
+        case "exact":
+          obj[key] = obj[key].exact;
+          break;
+        case "range":
+          obj[key + "_min"] = obj[key].min;
+          obj[key + "_max"] = obj[key].max;
+          delete obj[key];
+          break;
+        case "enum":
+          obj[key + "_enum"] = obj[key].enum;
+          delete obj[key];
+      }
+    } else {
+      resolveActive(obj[key]);
+    }
+  });
+  return obj;
+};
+
+export const snakifyKeys = (obj) => {
+  if (Array.isArray(obj)) {
+    return obj.map(v => snakifyKeys(v));
+  } else if (isPlainObject(obj)) {
+    return Object.keys(obj).reduce(
+        (result, key) => ({
+          ...result,
+          [snakeCase(key)]: snakifyKeys(obj[key]),
+        }),
+        {},
+    );
+  }
+  return obj;
+}
+
+
+export const toggleSetValue = (prevSet, value) => {
+  console.log("prevSet", prevSet, "value", value);
+  const set = new Set(prevSet);
+  set.has(value) ? set.delete(value) : set.add(value);
+  console.log("set", set);
+  return set;
+}
 
 const MAIN_DECK_FRAME_TYPES_SORT = {
   normal: 1,

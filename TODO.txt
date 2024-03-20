@@ -34,7 +34,8 @@ Generate options
     # take that amount from list??
 # TODO handle :default as option instead of nil
 # TODO support specifying certain attributes and stuff (atk, etc) on cards
-# TODO actually use values other then count
+# DONE actually use values other then count
+# TODO do some actual UX design
 
 Validation
 # DONE pick library (dry-validation)
