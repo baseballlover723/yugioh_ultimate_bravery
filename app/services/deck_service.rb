@@ -53,6 +53,19 @@ class DeckService
     }
   }
 
+  def self.get_settings
+    Rails.cache.fetch('settings', expires_in: 1.days) do
+      updated_at ||= Card.maximum(:updated_at)
+      settings = calc_settings
+      [updated_at, settings.hash, settings.to_json]
+    end
+  end
+
+  def self.refresh_settings_cache
+    Rails.cache.delete("settings")
+    get_settings
+  end
+
   def self.generate(options)
     options.with_defaults!(OPTIONS)
     puts "options: #{options}"
@@ -85,6 +98,45 @@ class DeckService
   end
 
   private
+
+  def self.calc_settings
+    settings = {
+      extra_deck: {
+        count: {
+          min: 0,
+          max: 15
+        }
+      }
+    }
+
+    keys = OPTIONS[:extra_deck].select { |key, val| val.is_a?(Hash) }.keys
+
+    result = Card.extra_deck.group(:macro_frame_type).select(
+      :macro_frame_type,
+      "MIN(level) AS min_level",
+      "MAX(level) AS max_level",
+      "MIN(atk) AS min_atk",
+      "MAX(atk) AS max_atk",
+      "MIN(def) AS min_def",
+      "MAX(def) AS max_def",
+      "ARRAY_AGG(DISTINCT card_attribute) AS unique_card_attributes",
+      "ARRAY_AGG(DISTINCT race) AS unique_races"
+    ).index_by(&:macro_frame_type).with_indifferent_access
+
+    keys.each do |key|
+      value = result[key]
+      hash = {}
+      settings[:extra_deck][key] = hash
+      hash[:count] = {min: 0, max: 15}
+      hash[:level] = {min: value.min_level, max: value.max_level}
+      hash[:atk] = {min: value.min_atk, max: value.max_atk}
+      hash[:def] = {min: value.min_def, max: value.max_def}
+      hash[:card_attribute] = {enum: value.unique_card_attributes}
+      hash[:race] = {enum: value.unique_races}
+    end
+
+    settings
+  end
 
   def self.generate_numb_main_deck(option)
     case option

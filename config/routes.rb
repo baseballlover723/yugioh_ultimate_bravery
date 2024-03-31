@@ -9,6 +9,11 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       get "deck/create", "deck#create"
+      get "deck/settings", to: "deck#settings", as: :deck_settings
+      if Rails.env.development?
+        get "deck/update_settings", to: "deck#update_settings", as: :deck_update_settings
+        get "deck/reset_settings", to: "deck#reset_settings", as: :deck_reset_settings
+      end
       resources :deck, only: [:index, :create, :show]
     end
   end
